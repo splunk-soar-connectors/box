@@ -1,0 +1,25 @@
+<!-- File: readme.html
+  Copyright (c) 2018 Splunk Inc.
+
+  SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+  without a valid written license from Splunk Inc. is PROHIBITED.
+-->Follow the steps outlined in this link and use the supplemental notes below: <a href="https://developer.box.com/docs/setting-up-a-jwt-app">https://developer.box.com/docs/setting-up-a-jwt-app</a>
+<br>
+<br>
+  Step 1 Notes:<br>
+  *Choose "Custom App" when setting up<br>
+  *Make sure "Generate User Access Tokens" is switched on in "Advanced Features" <br><br>
+  Step 2 Notes: Use the following instructions to generate public/private keypair:<br><br>
+    1.  Click on your JWT app from the developer console.<br>
+    2.  Click on the Configuration option from the left nav.<br>
+    3.  Scroll down to the Add and Manage Public Keys section.<br>
+    4.  Click on the button to Generate a Public/Private Keypair.<br>
+<br>
+<br>
+    Be sure to download the pair as you will not be able to retrieve the private key later on. Also, keep in mind this is an encrypted private key, so it will need to be decrypted.
+<br>
+<br>
+Once you have completed the app setup, you will need to configure the asset in Phantom.
+<br>
+<br>
+* The private key needs to be the value in between '-----BEGIN PRIVATE KEY-----' AND '-----END PRIVATE KEY-----'

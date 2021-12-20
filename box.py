@@ -1,0 +1,106 @@
+# File: box.py
+# Copyright (c) 2018 Splunk Inc.
+#
+# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
+# without a valid written license from Splunk Inc. is PROHIBITED.import time
+import jwt
+import requests
+import random
+import string
+import json
+
+
+class box(object):
+
+    def __init__(self, client_id, client_secret, public_key, private_key, box_user_id, box_kid):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.public_key = public_key
+        self.private_key = private_key
+        self.box_user_id = box_user_id
+        self.box_kid = box_kid
+
+    def _make_rest_call(self, url, params=None, files=None, body=None, headers=None, method='get'):
+
+        request_func = getattr(requests, method)
+        if not request_func:
+            return "Unsupported Method"
+        try:
+            r = request_func(url, data=body, params=params, headers=headers, files=files)
+        except Exception as e:
+            return "Server Connection Error:" + str(e.message)
+        else:
+            try:
+                resp_json = r.json()
+            except Exception as e:
+                if not r.text:
+                    return "Oops, something went wrong"
+                else:
+                    msg_string = "Something went wrong, oops: ".format(raw_text=r.text)
+                    return msg_string
+            return resp_json
+
+    def _get_auth_token(self):
+
+        exp = time.time() + 30
+        random_string = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(16))
+        claim_raw = {
+            "iss": self.client_id,
+            "sub": self.box_user_id,
+            "box_sub_type": "user",
+            "aud": "https://api.box.com/oauth2/token",
+            "jti": random_string,
+            "exp": int(exp)
+        }
+
+        header_raw = {
+            "alg": "RS256",
+            "typ": "JWT",
+            "kid": self.box_kid
+        }
+
+        pem_prefix = '-----BEGIN RSA PRIVATE KEY-----\n'
+        pem_suffix = '\n-----END RSA PRIVATE KEY-----'
+        private_key = '{}{}{}'.format(pem_prefix, self.private_key, pem_suffix)
+        signature = jwt.encode(headers=header_raw, payload=claim_raw, key=private_key, algorithm='RS256')
+        data = {
+            "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "assertion": signature
+        }
+        token_request_result = self._make_rest_call(url='https://api.box.com/oauth2/token', body=data, method='post')
+        try:
+            access_token = token_request_result['access_token']
+        except Exception as e:
+            return "Oops, something went wrong in retrieving access token: " + str(token_request_result)
+
+        return access_token
+
+    def _create_file(self, name, file, parent_id="0"):
+
+        access_token = self._get_auth_token()
+        if isinstance(access_token, str):
+            return "Whoops, something went wrong in creating the file: " + str(access_token)
+
+        files = {"file": (name, file)}
+        body = {"parent_id": parent_id}
+        headers = {"Authorization": "Bearer " + str(access_token)}
+
+        result = self._make_rest_call(url="https://upload.box.com/api/2.0/files/content", files=files, body=body, headers=headers, method="post")
+
+        return result
+
+    def _create_folder(self, name, parent_id="0"):
+        access_token = self._get_auth_token()
+        if isinstance(access_token, str):
+            return "Whoops, something went wrong in creating the folder: " + str(access_token)
+
+        headers = {
+            "Authorization": "Bearer " + str(access_token)
+            }
+        body = json.dumps({"name": name, "parent": {"id": parent_id}})
+
+        result = self._make_rest_call(url="https://api.box.com/2.0/folders", body=body, headers=headers, method="post")
+
+        return result
