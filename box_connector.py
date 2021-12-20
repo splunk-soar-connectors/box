@@ -15,15 +15,15 @@
 # and limitations under the License.
 #
 
+import json
+
 # Phantom App imports
-from phantom.base_connector import BaseConnector
-from phantom.action_result import ActionResult
 import phantom.app as phantom
 import phantom.rules as ph_rules
 import requests
-import json
-
 from box import box
+from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 
 class RetVal(tuple):
@@ -174,9 +174,10 @@ class BoxConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
     import sys
+
+    import pudb
 
     pudb.set_trace()
 

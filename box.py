@@ -13,12 +13,13 @@
 # and limitations under the License.
 #
 
-import time
-import jwt
-import requests
+import json
 import random
 import string
-import json
+import time
+
+import jwt
+import requests
 
 
 class box(object):
@@ -96,7 +97,13 @@ class box(object):
         body = {"parent_id": parent_id}
         headers = {"Authorization": "Bearer " + str(access_token)}
 
-        result = self._make_rest_call(url="https://upload.box.com/api/2.0/files/content", files=files, body=body, headers=headers, method="post")
+        result = self._make_rest_call(
+            url="https://upload.box.com/api/2.0/files/content",
+            files=files,
+            body=body,
+            headers=headers,
+            method="post"
+        )
 
         return result
 
