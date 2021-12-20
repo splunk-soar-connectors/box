@@ -20,7 +20,8 @@
     "pip_dependencies": {
         "pypi": [
             {
-                "module": "PyJWT"
+                "module": "PyJWT",
+                "path": "wheels/PyJWT-2.3.0-py3-none-any.whl"
             }
         ]
     },

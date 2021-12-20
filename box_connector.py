@@ -21,9 +21,10 @@ import json
 import phantom.app as phantom
 import phantom.rules as ph_rules
 import requests
-from box import box
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
+
+from box import box
 
 
 class RetVal(tuple):
