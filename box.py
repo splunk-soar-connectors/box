@@ -1,8 +1,19 @@
 # File: box.py
-# Copyright (c) 2018 Splunk Inc.
+# Copyright (c) 2021 Splunk Inc.
 #
-# SPLUNK CONFIDENTIAL - Use or disclosure of this material in whole or in part
-# without a valid written license from Splunk Inc. is PROHIBITED.import time
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+#
+
+import time
 import jwt
 import requests
 import random
@@ -32,11 +43,11 @@ class box(object):
         else:
             try:
                 resp_json = r.json()
-            except Exception as e:
+            except Exception:
                 if not r.text:
                     return "Oops, something went wrong"
                 else:
-                    msg_string = "Something went wrong, oops: ".format(raw_text=r.text)
+                    msg_string = "Something went wrong, oops: {raw_text}".format(raw_text=r.text)
                     return msg_string
             return resp_json
 
@@ -61,7 +72,7 @@ class box(object):
 
         pem_prefix = '-----BEGIN RSA PRIVATE KEY-----\n'
         pem_suffix = '\n-----END RSA PRIVATE KEY-----'
-        private_key = '{}{}{}'.format(pem_prefix, self.private_key, pem_suffix)
+        private_key = '{}{}{}'.format(pem_prefix, self.private_key.replace('\\n', '\n'), pem_suffix)
         signature = jwt.encode(headers=header_raw, payload=claim_raw, key=private_key, algorithm='RS256')
         data = {
             "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
@@ -72,7 +83,7 @@ class box(object):
         token_request_result = self._make_rest_call(url='https://api.box.com/oauth2/token', body=data, method='post')
         try:
             access_token = token_request_result['access_token']
-        except Exception as e:
+        except Exception:
             return "Oops, something went wrong in retrieving access token: " + str(token_request_result)
 
         return access_token
@@ -80,8 +91,6 @@ class box(object):
     def _create_file(self, name, file, parent_id="0"):
 
         access_token = self._get_auth_token()
-        if isinstance(access_token, str):
-            return "Whoops, something went wrong in creating the file: " + str(access_token)
 
         files = {"file": (name, file)}
         body = {"parent_id": parent_id}
@@ -93,12 +102,10 @@ class box(object):
 
     def _create_folder(self, name, parent_id="0"):
         access_token = self._get_auth_token()
-        if isinstance(access_token, str):
-            return "Whoops, something went wrong in creating the folder: " + str(access_token)
 
         headers = {
             "Authorization": "Bearer " + str(access_token)
-            }
+        }
         body = json.dumps({"name": name, "parent": {"id": parent_id}})
 
         result = self._make_rest_call(url="https://api.box.com/2.0/folders", body=body, headers=headers, method="post")

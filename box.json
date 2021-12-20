@@ -8,13 +8,14 @@
     "logo_dark": "logo_box_dark.svg",
     "product_name": "Box",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
-    "license": "Copyright (c) 2018 Splunk Inc.",
-    "app_version": "1.0.2",
+    "publisher": "Splunk Community",
+    "license": "Copyright (c) 2021 Splunk Inc.",
+    "app_version": "1.0.0",
     "utctime_updated": "2018-12-07T01:35:31.000000Z",
     "package_name": "phantom_box",
-    "main_module": "box_connector.pyc",
-    "min_phantom_version": "3.5.210",
+    "python_version": "3",
+    "main_module": "box_connector.py",
+    "min_phantom_version": "5.0.0",
     "app_wizard_version": "1.0.0",
     "pip_dependencies": {
         "pypi": [
@@ -66,7 +67,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -84,14 +84,12 @@
                     "description": "Name of file to be created",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
                     "order": 0
                 },
                 "folder_id": {
                     "description": "Box folder ID to create file in. Enter \"0\" to create in root",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
                     "order": 1
                 },
                 "vault_id": {
@@ -109,31 +107,35 @@
                 {
                     "data_path": "action_result.parameter.file_name",
                     "data_type": "string",
-                    "column_name": "file_name",
+                    "column_name": "File Name",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.folder_id",
                     "data_type": "string",
-                    "column_name": "folder_id",
+                    "column_name": "Folder ID",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.vault_id",
                     "data_type": "string",
-                    "column_name": "vault_id",
+                    "column_name": "Vault ID",
                     "column_order": 2
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 3
+                    "column_name": "Status",
+                    "column_order": 3,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.file_id",
                     "data_type": "string",
-                    "column_name": "file id",
+                    "column_name": "File ID",
                     "column_order": 4
                 },
                 {
@@ -169,14 +171,12 @@
                     "description": "Name of folder to be created",
                     "data_type": "string",
                     "required": true,
-                    "primary": true,
                     "order": 0
                 },
                 "parent_id": {
                     "description": "Box folder ID to create folder in. Enter \"0\" to create in root",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
                     "order": 1
                 }
             },
@@ -184,25 +184,29 @@
                 {
                     "data_path": "action_result.parameter.parent_id",
                     "data_type": "string",
-                    "column_name": "parent folder id",
+                    "column_name": "Parent Folder ID",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.folder_name",
                     "data_type": "string",
-                    "column_name": "folder name",
+                    "column_name": "Folder Name",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 3
+                    "column_name": "Status",
+                    "column_order": 3,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.summary.folder_id",
                     "data_type": "string",
-                    "column_name": "folder id",
+                    "column_name": "Folder ID",
                     "column_order": 2
                 },
                 {
@@ -216,6 +220,73 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.item_collection.total_count", 
+                    "example_values": [
+                        0
+                    ], 
+                    "data_type": "numeric"
+                }, 
+                {
+                    "data_path": "action_result.data.*.item_collection.limit", 
+                    "example_values": [
+                        100
+                    ], 
+                    "data_type": "numeric"
+                }, 
+                {
+                    "data_path": "action_result.data.*.item_collection.offset", 
+                    "example_values": [
+                        0
+                    ], 
+                    "data_type": "numeric"
+                }, 
+                {
+                    "data_path": "action_result.data.*.size", 
+                    "example_values": [
+                        0
+                    ], 
+                    "data_type": "numeric"
+                }, 
+                {
+                    "data_path": "action_result.data.*.purged_at",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.folder_upload_email",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.shared_link",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.path_collection.total_count", 
+                    "example_values": [
+                        2
+                    ], 
+                    "data_type": "numeric"
+                }, 
+                {
+                    "data_path": "action_result.data.*.path_collection.entries.*.sequence_id",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.path_collection.entries.*.etag",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.trashed_at",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.parent.sequence_id",
+                    "data_type": "string"
+                }, 
+                {
+                    "data_path": "action_result.data.*.parent.etag",
+                    "data_type": "string"
                 }
             ],
             "render": {
