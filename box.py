@@ -36,19 +36,19 @@ class box(object):
 
         request_func = getattr(requests, method)
         if not request_func:
-            return {"type":"error", "message":"Unsupported Method"}
+            return {"type": "error", "message": "Unsupported Method"}
         try:
             r = request_func(url, data=body, params=params, headers=headers, files=files)
         except Exception as e:
-            return {"type":"error", "message":"Server Connection Error: {}".format(str(e))}
+            return {"type": "error", "message": "Server Connection Error: {}".format(str(e))}
         else:
             try:
                 resp_json = r.json()
             except Exception:
                 if not r.text:
-                    return {"type":"error", "message":"Oops, something went wrong"}
+                    return {"type": "error", "message": "Oops, something went wrong"}
                 else:
-                    msg_string = {"type":"error", "message":"Something went wrong, oops: {raw_text}".format(raw_text=r.text)}
+                    msg_string = {"type": "error", "message": "Something went wrong, oops: {raw_text}".format(raw_text=r.text)}
                     return msg_string
             return resp_json
 
