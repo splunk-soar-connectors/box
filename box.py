@@ -36,19 +36,19 @@ class box(object):
 
         request_func = getattr(requests, method)
         if not request_func:
-            return "Unsupported Method"
+            return {"type":"error", "message":"Unsupported Method"}
         try:
             r = request_func(url, data=body, params=params, headers=headers, files=files)
         except Exception as e:
-            return "Server Connection Error:" + str(e.message)
+            return {"type":"error", "message":"Server Connection Error: {}".format(str(e))}
         else:
             try:
                 resp_json = r.json()
             except Exception:
                 if not r.text:
-                    return "Oops, something went wrong"
+                    return {"type":"error", "message":"Oops, something went wrong"}
                 else:
-                    msg_string = "Something went wrong, oops: {raw_text}".format(raw_text=r.text)
+                    msg_string = {"type":"error", "message":"Something went wrong, oops: {raw_text}".format(raw_text=r.text)}
                     return msg_string
             return resp_json
 
@@ -85,7 +85,7 @@ class box(object):
         try:
             access_token = token_request_result['access_token']
         except Exception:
-            return "Oops, something went wrong in retrieving access token: " + str(token_request_result)
+            return "Oops, something went wrong in retrieving access token: {}".format(str(token_request_result))
 
         return access_token
 

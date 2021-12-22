@@ -77,7 +77,7 @@ class BoxConnector(BaseConnector):
                 return action_result.set_status(phantom.APP_ERROR, "Not found vault for {} id.".format(vault_id))
             data = list(data)[0]
             file_path = data.get('path')
-            file = open(file_path)
+            file = open(file_path,"rb", encoding=None)
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, "There was an issue opening the file: " + str(e.message))
 

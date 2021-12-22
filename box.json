@@ -16,6 +16,7 @@
     "python_version": "3",
     "main_module": "box_connector.py",
     "min_phantom_version": "5.0.0",
+    "fips_compliant": true,
     "app_wizard_version": "1.0.0",
     "pip_dependencies": {
         "pypi": [
