@@ -24,7 +24,7 @@ import requests
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
-from box import box
+from box import Box
 
 
 class RetVal(tuple):
@@ -40,7 +40,13 @@ class BoxConnector(BaseConnector):
         super(BoxConnector, self).__init__()
 
     def _handle_test_connectivity(self, param):
+        """Validate the asset configuration for connectivity using supplied configuration.
 
+        Parameters:
+            :param param: Dictionary of input parameters
+        Returns:
+            :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -63,8 +69,15 @@ class BoxConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR)
 
     def _handle_upload_file(self, param):
+        """
+        Upload a file from vault to box.
+
+        Parameters:
+            :param param: Dictionary of input parameters
+        Returns:
+            :return: status phantom.APP_ERROR/phantom.APP_SUCCESS(along with appropriate message)
+        """
         action_result = self.add_action_result(ActionResult(dict(param)))
-        # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         name = param["file_name"]
@@ -79,12 +92,11 @@ class BoxConnector(BaseConnector):
             file_path = data.get('path')
             file = open(file_path, "rb")
         except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, "There was an issue opening the file: " + str(e.message))
+            return action_result.set_status(phantom.APP_ERROR, "There was an issue opening the file: " + str(e))
 
         result = self.box._create_file(name=name, parent_id=folder_id, file=file)
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
-
         action_result.add_data(result)
         summary = {}
         if result.get('type') != 'error' and result.get('entries'):
@@ -99,8 +111,15 @@ class BoxConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully uploaded file")
 
     def _handle_create_folder(self, param):
+        """
+        Creates a new empty folder within the specified parent folder in box.
+
+        Parameters:
+            :param param: Dictionary of input parameters
+        Returns:
+            :return: status phantom.APP_ERROR/phantom.APP_SUCCESS(along with appropriate message)
+        """
         action_result = self.add_action_result(ActionResult(dict(param)))
-        # Implement the handler here
         # use self.save_progress(...) to send progress messages back to the platform
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         name = param["folder_name"]
@@ -121,7 +140,13 @@ class BoxConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully created folder")
 
     def handle_action(self, param):
+        """Get current action identifier and call member function of its own to handle the action.
 
+        Parameters:
+            :param param: dictionary which contains information about the actions to be executed
+        Returns:
+            :return: status success/failure
+        """
         ret_val = phantom.APP_SUCCESS
 
         # Get the action that we are supposed to execute for this App Run
@@ -141,7 +166,14 @@ class BoxConnector(BaseConnector):
         return ret_val
 
     def initialize(self):
+        """Get the config variables and set it within box object.
 
+        This method MUST return a value of either phantom.APP_SUCCESS or phantom.APP_ERROR.
+        If this method returns phantom.APP_ERROR, then AppConnector::handle_action will not get called.
+
+        Returns:
+            :return: status success/failure
+        """
         # Load the state in initialize, use it to store data
         # that needs to be accessed across actions
         self._state = self.load_state()
@@ -155,7 +187,7 @@ class BoxConnector(BaseConnector):
         self.client_id = config.get('client_id')
         self.client_secret = config.get('client_secret')
 
-        self.box = box(
+        self.box = Box(
             client_id=self.client_id,
             client_secret=self.client_secret,
             public_key=self.public_key,
@@ -167,7 +199,11 @@ class BoxConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def finalize(self):
+        """Perform some final operations or clean up operations.
 
+        Returns:
+            :return: status success
+        """
         # Save the state, this data is saved accross actions and app upgrades
         self.save_state(self._state)
         return phantom.APP_SUCCESS

@@ -22,7 +22,7 @@ import jwt
 import requests
 
 
-class box(object):
+class Box(object):
 
     def __init__(self, client_id, client_secret, public_key, private_key, box_user_id, box_kid):
         self.client_id = client_id
