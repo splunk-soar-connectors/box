@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
     "license": "Copyright (c) 2021 Splunk Inc.",
-    "app_version": "1.0.0",
+    "app_version": "1.0.1",
     "utctime_updated": "2018-12-07T01:35:31.000000Z",
     "package_name": "phantom_box",
     "python_version": "3",
@@ -224,68 +224,68 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.data.*.item_collection.total_count", 
+                    "data_path": "action_result.data.*.item_collection.total_count",
                     "example_values": [
                         0
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.item_collection.limit", 
+                    "data_path": "action_result.data.*.item_collection.limit",
                     "example_values": [
                         100
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.item_collection.offset", 
+                    "data_path": "action_result.data.*.item_collection.offset",
                     "example_values": [
                         0
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.size", 
+                    "data_path": "action_result.data.*.size",
                     "example_values": [
                         0
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.purged_at",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.folder_upload_email",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.shared_link",
                     "data_type": "string"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.path_collection.total_count", 
+                    "data_path": "action_result.data.*.path_collection.total_count",
                     "example_values": [
                         2
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.path_collection.entries.*.sequence_id",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.path_collection.entries.*.etag",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.trashed_at",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.parent.sequence_id",
                     "data_type": "string"
-                }, 
+                },
                 {
                     "data_path": "action_result.data.*.parent.etag",
                     "data_type": "string"
