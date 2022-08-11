@@ -15,14 +15,14 @@
     "package_name": "phantom_box",
     "python_version": "3",
     "main_module": "box_connector.py",
-    "min_phantom_version": "5.0.0",
+    "min_phantom_version": "5.3.0",
     "fips_compliant": true,
     "app_wizard_version": "1.0.0",
     "pip_dependencies": {
-        "pypi": [
+        "wheel": [
             {
                 "module": "PyJWT",
-                "path": "wheels/PyJWT-2.3.0-py3-none-any.whl"
+                "input_file": "wheels/py3/PyJWT-2.4.0-py3-none-any.whl"
             }
         ]
     },
