@@ -2,15 +2,15 @@
 # Box
 
 Publisher: Splunk Community  
-Connector Version: 1\.0\.2  
+Connector Version: 1\.0\.3  
 Product Vendor: Box  
 Product Name: Box  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Minimum Product Version: 5\.3\.0  
 
 Perform various actions in a box environment
 
-[comment]: # " File: readme.md"
+[comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2021 Splunk Inc."
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
