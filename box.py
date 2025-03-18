@@ -64,7 +64,7 @@ class Box:
 
         header_raw = {"alg": "RS256", "typ": "JWT", "kid": self.box_kid}
 
-        pem_prefix = "-----BEGIN RSA PRIVATE KEY-----\n"
+        pem_prefix = "-----BEGIN RSA PRIVATE KEY-----\n"  # pragma: allowlist secret
         pem_suffix = "\n-----END RSA PRIVATE KEY-----"
         private_key = "{}{}{}".format(pem_prefix, self.private_key.replace("\\n", "\n"), pem_suffix)
         signature = jwt.encode(headers=header_raw, payload=claim_raw, key=private_key, algorithm="RS256")
