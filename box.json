@@ -9,7 +9,7 @@
     "product_name": "Box",
     "product_version_regex": ".*",
     "publisher": "Splunk Community",
-    "license": "Copyright (c) 2021 Splunk Inc.",
+    "license": "Copyright (c) 2021-2025 Splunk Inc.",
     "app_version": "1.0.3",
     "utctime_updated": "2022-01-07T20:34:14.000000Z",
     "package_name": "phantom_box",
@@ -122,7 +122,10 @@
                     "data_path": "action_result.parameter.vault_id",
                     "data_type": "string",
                     "column_name": "Vault ID",
-                    "column_order": 2
+                    "column_order": 2,
+                    "contains": [
+                        "vault id"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",

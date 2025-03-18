@@ -1,148 +1,128 @@
-[comment]: # "Auto-generated SOAR connector documentation"
 # Box
 
-Publisher: Splunk Community  
-Connector Version: 1\.0\.3  
-Product Vendor: Box  
-Product Name: Box  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.0  
+Publisher: Splunk Community \
+Connector Version: 1.0.3 \
+Product Vendor: Box \
+Product Name: Box \
+Minimum Product Version: 5.3.0
 
 Perform various actions in a box environment
 
-[comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2021 Splunk Inc."
-[comment]: # ""
-[comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
-[comment]: # "you may not use this file except in compliance with the License."
-[comment]: # "You may obtain a copy of the License at"
-[comment]: # ""
-[comment]: # "    http://www.apache.org/licenses/LICENSE-2.0"
-[comment]: # ""
-[comment]: # "Unless required by applicable law or agreed to in writing, software distributed under"
-[comment]: # "the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,"
-[comment]: # "either express or implied. See the License for the specific language governing permissions"
-[comment]: # "and limitations under the License."
-[comment]: # ""
-Follow the steps outlined in this link and use the supplemental notes below:
-<https://developer.box.com/docs/setting-up-a-jwt-app>  
-  
-Step 1 Notes:  
-\*Choose "Custom App" when setting up  
-\*Make sure "Generate User Access Tokens" is switched on in "Advanced Features"  
-  
-Step 2 Notes: Use the following instructions to generate public/private keypair:  
-  
-1. Click on your JWT app from the developer console.  
-2. Click on the Configuration option from the left nav.  
-3. Scroll down to the Add and Manage Public Keys section.  
-4. Click on the button to Generate a Public/Private Keypair.  
-  
-  
-Be sure to download the pair as you will not be able to retrieve the private key later on. Also,
-keep in mind this is an encrypted private key, so it will need to be decrypted.  
-  
-Once you have completed the app setup, you will need to configure the asset in Phantom.  
-  
-\* The private key needs to be the value in between '-----BEGIN PRIVATE KEY-----' AND '-----END
-PRIVATE KEY-----'
+### Configuration variables
 
-The app uses HTTP/ HTTPS protocol for communicating with the Box server. Below are the default ports
-used by Splunk SOAR.
-
-|         Service Name | Transport Protocol | Port |
-|----------------------|--------------------|------|
-|         http         | tcp                | 80   |
-|         https        | tcp                | 443  |
-
-
-### Configuration Variables
-The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a Box asset in SOAR.
+This table lists the configuration variables required to operate Box. These variables are specified when configuring a Box asset in Splunk SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**client\_id** |  required  | string | Client ID
-**client\_secret** |  required  | password | Client secret
-**public\_key** |  required  | string | Public key
-**private\_key** |  required  | password | Private key \(decrypted\)
-**box\_user\_id** |  required  | string | User ID found on app general screen
-**box\_key\_id** |  required  | string | Key ID of the box key pair being used \(located on configuration page\)
+**client_id** | required | string | Client ID |
+**client_secret** | required | password | Client secret |
+**public_key** | required | string | Public key |
+**private_key** | required | password | Private key (decrypted) |
+**box_user_id** | required | string | User ID found on app general screen |
+**box_key_id** | required | string | Key ID of the box key pair being used (located on configuration page) |
 
-### Supported Actions  
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration  
-[upload file](#action-upload-file) - Upload file to a box folder  
-[create folder](#action-create-folder) - Create a folder in box  
+### Supported Actions
+
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
+[upload file](#action-upload-file) - Upload file to a box folder \
+[create folder](#action-create-folder) - Create a folder in box
 
 ## action: 'test connectivity'
+
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test**  
+Type: **test** \
 Read only: **True**
 
 #### Action Parameters
+
 No parameters are required for this action
 
 #### Action Output
-No Output  
+
+No Output
 
 ## action: 'upload file'
+
 Upload file to a box folder
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file\_name** |  required  | Name of file to be created | string | 
-**folder\_id** |  required  | Box folder ID to create file in\. Enter "0" to create in root | string | 
-**vault\_id** |  required  | Phantom vault ID of file to be created in box | string |  `vault id` 
+**file_name** | required | Name of file to be created | string | |
+**folder_id** | required | Box folder ID to create file in. Enter "0" to create in root | string | |
+**vault_id** | required | Phantom vault ID of file to be created in box | string | `vault id` |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.file\_name | string | 
-action\_result\.parameter\.folder\_id | string | 
-action\_result\.parameter\.vault\_id | string | 
-action\_result\.status | string | 
-action\_result\.summary\.file\_id | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.summary\.sha1 | string |   
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.file_name | string | | |
+action_result.parameter.folder_id | string | | |
+action_result.parameter.vault_id | string | `vault id` | |
+action_result.status | string | | success failed |
+action_result.summary.file_id | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
+action_result.summary.sha1 | string | | |
 
 ## action: 'create folder'
+
 Create a folder in box
 
-Type: **generic**  
+Type: **generic** \
 Read only: **False**
 
 #### Action Parameters
+
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**folder\_name** |  required  | Name of folder to be created | string | 
-**parent\_id** |  required  | Box folder ID to create folder in\. Enter "0" to create in root | string | 
+**folder_name** | required | Name of folder to be created | string | |
+**parent_id** | required | Box folder ID to create folder in. Enter "0" to create in root | string | |
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.parent\_id | string | 
-action\_result\.parameter\.folder\_name | string | 
-action\_result\.status | string | 
-action\_result\.summary\.folder\_id | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.item\_collection\.total\_count | numeric | 
-action\_result\.data\.\*\.item\_collection\.limit | numeric | 
-action\_result\.data\.\*\.item\_collection\.offset | numeric | 
-action\_result\.data\.\*\.size | numeric | 
-action\_result\.data\.\*\.purged\_at | string | 
-action\_result\.data\.\*\.folder\_upload\_email | string | 
-action\_result\.data\.\*\.shared\_link | string | 
-action\_result\.data\.\*\.path\_collection\.total\_count | numeric | 
-action\_result\.data\.\*\.path\_collection\.entries\.\*\.sequence\_id | string | 
-action\_result\.data\.\*\.path\_collection\.entries\.\*\.etag | string | 
-action\_result\.data\.\*\.trashed\_at | string | 
-action\_result\.data\.\*\.parent\.sequence\_id | string | 
-action\_result\.data\.\*\.parent\.etag | string | 
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.parent_id | string | | |
+action_result.parameter.folder_name | string | | |
+action_result.status | string | | success failed |
+action_result.summary.folder_id | string | | |
+action_result.message | string | | |
+summary.total_objects | numeric | | |
+summary.total_objects_successful | numeric | | |
+action_result.data.\*.item_collection.total_count | numeric | | 0 |
+action_result.data.\*.item_collection.limit | numeric | | 100 |
+action_result.data.\*.item_collection.offset | numeric | | 0 |
+action_result.data.\*.size | numeric | | 0 |
+action_result.data.\*.purged_at | string | | |
+action_result.data.\*.folder_upload_email | string | | |
+action_result.data.\*.shared_link | string | | |
+action_result.data.\*.path_collection.total_count | numeric | | 2 |
+action_result.data.\*.path_collection.entries.\*.sequence_id | string | | |
+action_result.data.\*.path_collection.entries.\*.etag | string | | |
+action_result.data.\*.trashed_at | string | | |
+action_result.data.\*.parent.sequence_id | string | | |
+action_result.data.\*.parent.etag | string | | |
+
+______________________________________________________________________
+
+Auto-generated Splunk SOAR Connector documentation.
+
+Copyright 2025 Splunk Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.

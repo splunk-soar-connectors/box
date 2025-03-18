@@ -1,7 +1,7 @@
 # --
 # File: box_connector.py
 #
-# Copyright (c) 2021 Splunk Inc.
+# Copyright (c) 2021-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,11 +33,9 @@ class RetVal(tuple):
 
 
 class BoxConnector(BaseConnector):
-
     def __init__(self):
-
         # Call the BaseConnectors init first
-        super(BoxConnector, self).__init__()
+        super().__init__()
 
     def _handle_test_connectivity(self, param):
         """Validate the asset configuration for connectivity using supplied configuration.
@@ -79,7 +77,7 @@ class BoxConnector(BaseConnector):
         """
         action_result = self.add_action_result(ActionResult(dict(param)))
         # use self.save_progress(...) to send progress messages back to the platform
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         name = param["file_name"]
         folder_id = param["folder_id"]
         vault_id = param["vault_id"]
@@ -87,9 +85,9 @@ class BoxConnector(BaseConnector):
         try:
             success, _, data = ph_rules.vault_info(vault_id=vault_id)
             if not success:
-                return action_result.set_status(phantom.APP_ERROR, "Not found vault for {} id.".format(vault_id))
-            data = list(data)[0]
-            file_path = data.get('path')
+                return action_result.set_status(phantom.APP_ERROR, f"Not found vault for {vault_id} id.")
+            data = next(iter(data))
+            file_path = data.get("path")
             file = open(file_path, "rb")
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, "There was an issue opening the file: " + str(e))
@@ -99,10 +97,10 @@ class BoxConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result.add_data(result)
         summary = {}
-        if result.get('type') != 'error' and result.get('entries'):
-            entries = result.get('entries')[0]
-            summary['file_id'] = str(entries.get('id'))
-            summary['sha1'] = entries.get('sha1')
+        if result.get("type") != "error" and result.get("entries"):
+            entries = result.get("entries")[0]
+            summary["file_id"] = str(entries.get("id"))
+            summary["sha1"] = entries.get("sha1")
             summary = action_result.update_summary(summary)
         else:
             return action_result.set_status(phantom.APP_ERROR, "There was an issue with the file creation: " + str(result))
@@ -121,7 +119,7 @@ class BoxConnector(BaseConnector):
         """
         action_result = self.add_action_result(ActionResult(dict(param)))
         # use self.save_progress(...) to send progress messages back to the platform
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         name = param["folder_name"]
         parent_id = param["parent_id"]
 
@@ -130,8 +128,8 @@ class BoxConnector(BaseConnector):
         action_result.add_data(result)
         summary = {}
 
-        if result.get('type') != 'error':
-            summary['folder_id'] = str(result.get('id'))
+        if result.get("type") != "error":
+            summary["folder_id"] = str(result.get("id"))
             summary = action_result.update_summary(summary)
         else:
             return action_result.set_status(phantom.APP_ERROR, "There was an issue with the folder creation: " + str(result))
@@ -154,13 +152,13 @@ class BoxConnector(BaseConnector):
 
         self.debug_print("action_id", self.get_action_identifier())
 
-        if action_id == 'test_connectivity':
+        if action_id == "test_connectivity":
             ret_val = self._handle_test_connectivity(param)
 
-        elif action_id == 'upload_file':
+        elif action_id == "upload_file":
             ret_val = self._handle_upload_file(param)
 
-        elif action_id == 'create_folder':
+        elif action_id == "create_folder":
             ret_val = self._handle_create_folder(param)
 
         return ret_val
@@ -180,12 +178,12 @@ class BoxConnector(BaseConnector):
 
         # get the asset config
         config = self.get_config()
-        self.public_key = config.get('public_key')
-        self.private_key = config.get('private_key')
-        self.kid = config.get('box_key_id')
-        self.box_user_id = config.get('box_user_id')
-        self.client_id = config.get('client_id')
-        self.client_secret = config.get('client_secret')
+        self.public_key = config.get("public_key")
+        self.private_key = config.get("private_key")
+        self.kid = config.get("box_key_id")
+        self.box_user_id = config.get("box_user_id")
+        self.client_id = config.get("client_id")
+        self.client_secret = config.get("client_secret")
 
         self.box = Box(
             client_id=self.client_id,
@@ -193,7 +191,7 @@ class BoxConnector(BaseConnector):
             public_key=self.public_key,
             private_key=self.private_key,
             box_user_id=self.box_user_id,
-            box_kid=self.kid
+            box_kid=self.kid,
         )
 
         return phantom.APP_SUCCESS
@@ -209,8 +207,7 @@ class BoxConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     import argparse
     import sys
 
@@ -220,10 +217,10 @@ if __name__ == '__main__':
 
     argparser = argparse.ArgumentParser()
 
-    argparser.add_argument('input_test_json', help='Input Test JSON file')
-    argparser.add_argument('-u', '--username', help='username', required=False)
-    argparser.add_argument('-p', '--password', help='password', required=False)
-    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
+    argparser.add_argument("input_test_json", help="Input Test JSON file")
+    argparser.add_argument("-u", "--username", help="username", required=False)
+    argparser.add_argument("-p", "--password", help="password", required=False)
+    argparser.add_argument("-v", "--verify", action="store_true", help="verify", required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
@@ -233,32 +230,31 @@ if __name__ == '__main__':
     verify = args.verify
 
     if username is not None and password is None:
-
         # User specified a username but not a password, so ask
         import getpass
+
         password = getpass.getpass("Password: ")
 
     if username and password:
         try:
-
-            login_url = BoxConnector._get_phantom_base_url() + '/login'
+            login_url = BoxConnector._get_phantom_base_url() + "/login"
 
             print("Accessing the Login page")
             r = requests.get(login_url, verify=verify, timeout=60)
-            csrftoken = r.cookies['csrftoken']
+            csrftoken = r.cookies["csrftoken"]
 
             data = dict()
-            data['username'] = username
-            data['password'] = password
-            data['csrfmiddlewaretoken'] = csrftoken
+            data["username"] = username
+            data["password"] = password
+            data["csrfmiddlewaretoken"] = csrftoken
 
             headers = dict()
-            headers['Cookie'] = 'csrftoken=' + csrftoken
-            headers['Referer'] = login_url
+            headers["Cookie"] = "csrftoken=" + csrftoken
+            headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=verify, data=data, headers=headers, timeout=60)
-            session_id = r2.cookies['sessionid']
+            session_id = r2.cookies["sessionid"]
         except Exception as e:
             print("Unable to get session id from the platfrom. Error: " + str(e))
             sys.exit(1)
@@ -272,8 +268,8 @@ if __name__ == '__main__':
         connector.print_progress_message = True
 
         if session_id is not None:
-            in_json['user_session_token'] = session_id
-            connector._set_csrf_info(csrftoken, headers['Referer'])
+            in_json["user_session_token"] = session_id
+            connector._set_csrf_info(csrftoken, headers["Referer"])
 
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
