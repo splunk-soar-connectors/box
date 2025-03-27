@@ -1,9 +1,9 @@
 Splunk SOAR Box
-Copyright (c) 2021 Splunk Inc.
+Copyright (c) 2021-2025 Splunk Inc.
 
-Third-party Software Attributions:
+Third Party Software Attributions:
 
-Library: PyJWT
-Version: 2.3.0
+Name: PyJWT
+Version: 2.4.0
+Author: Jose Padilla
 License: MIT
-Copyright 2015 José Padilla
