@@ -1,7 +1,7 @@
 # Box
 
 Publisher: Splunk Community \
-Connector Version: 1.0.3 \
+Connector Version: 1.0.4 \
 Product Vendor: Box \
 Product Name: Box \
 Minimum Product Version: 5.3.0
